@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import React,{useState} from 'react';
 import './App.css';
+import AdminForm from './Form/AdminForm';
+import CartItems from './UI/CartItems';
 
 function App() {
+  const [cartList , setCartList] = useState([])
+
+  const addingChangeHandler = (Id , Price ,Name,Cat) => {
+    setCartList((prevItem) => [...prevItem,{id:Id, price:Price, name:Name,cat:Cat}])
+    console.log(cartList);
+    
+  }
+  const deleteItemHandler = (id) => {
+    const updatedCart = cartList.filter(item => item.id !== id);
+    setCartList(updatedCart);
+    localStorage.removeItem(id);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>  
+      <AdminForm onAdding={addingChangeHandler}/>
+      <h1>Products</h1>
+      <CartItems cart = {cartList } onDelete={deleteItemHandler}/>
     </div>
   );
 }
