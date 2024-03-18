@@ -1,28 +1,29 @@
 import React,{useState} from 'react';
 import './App.css';
 import AdminForm from './Form/AdminForm';
-import CartItems from './UI/CartItems';
+import Output from './UI/Output';
+import TotalSum from './UI/TotalSum';
 
 function App() {
-  const [cartList , setCartList] = useState([])
-
-  const addingChangeHandler = (Id , Price ,Name,Cat) => {
-    setCartList((prevItem) => [...prevItem,{id:Id, price:Price, name:Name,cat:Cat}])
-    console.log(cartList);
-    
+  const [enteredData,setEnteredData] = useState([]);
+  const addProductHandler =(inp)=>{
+    setEnteredData((prevInput) => {
+      return [inp,...prevInput]
+    })
   }
-  const deleteItemHandler = (id) => {
-    const updatedCart = cartList.filter(item => item.id !== id);
-    setCartList(updatedCart);
-    localStorage.removeItem(id);
-  };
-  return (
-    <div>  
-      <AdminForm onAdding={addingChangeHandler}/>
-      <h1>Products</h1>
-      <CartItems cart = {cartList } onDelete={deleteItemHandler}/>
-    </div>
-  );
+const deleteHandler =(id)=>{
+  const updatedData = enteredData.filter((input) => input.id !== id)
+  localStorage.removeItem(id)
+  setEnteredData(updatedData)
+}
+ return(
+  <div>
+    <AdminForm onAddProduct={addProductHandler}/>
+    <Output inputs={enteredData} onDelete ={deleteHandler}/>
+    <TotalSum input1 ={enteredData}/>
+  </div>
+ )
+ 
 }
 
 export default App;
